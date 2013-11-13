@@ -21,7 +21,7 @@ $(function() {
           newTweetHTML.find(".tweeted_at").html(newTweet.tweeted_at);
 
           $('#tweets').prepend(newTweetHTML);
-          newTweetHTML.delay(500 * i).fadeIn(1000);
+          newTweetHTML.delay(100 * i).fadeIn(500);
         }
    
         setTimeout(periodicTimer, 5000);

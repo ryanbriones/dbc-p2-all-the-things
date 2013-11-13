@@ -19,6 +19,8 @@ gem 'shotgun'
 
 gem 'sidekiq'
 
+gem 'tweetstream'
+
 group :test do
   gem 'faker'
   gem 'rspec'

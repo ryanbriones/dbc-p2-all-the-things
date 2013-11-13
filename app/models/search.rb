@@ -20,6 +20,21 @@ class Search < ActiveRecord::Base
     end
   end
 
+  def stream_twitter
+    TweetStream::Client.new.track(keywords) do |status|
+      tweets.create(
+        screen_name: status.user.screen_name,
+        text: status.text,
+        tweeted_at: status.created_at
+      )
+
+      reload
+      unless self.on?
+        return "Stopping search #{id}: #{keywords}"
+      end
+    end
+  end
+
   def stop!
     update_attributes!(:on => false)
   end

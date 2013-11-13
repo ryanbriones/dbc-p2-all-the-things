@@ -15,6 +15,7 @@ require 'pg'
 require 'active_record'
 require 'logger'
 require 'sidekiq'
+require 'tweetstream'
 
 require 'sinatra'
 require "sinatra/reloader" if development?
@@ -25,6 +26,21 @@ require 'erb'
 APP_ROOT = Pathname.new(File.expand_path('../../', __FILE__))
 
 APP_NAME = APP_ROOT.basename.to_s
+
+if(['CONSUMER_KEY', 'CONSUMER_SECRET', 'ACCESS_TOKEN', 'ACCESS_TOKEN_SECRET'].any? { |key| !ENV[key].nil? })
+  TweetStream.configure do |config|
+    config.consumer_key = ENV['CONSUMER_KEY']
+    config.consumer_secret = ENV['CONSUMER_SECRET']
+    config.oauth_token = ENV['ACCESS_TOKEN']
+    config.oauth_token_secret = ENV['ACCESS_TOKEN_SECRET']
+    config.auth_method = :oauth
+  end
+  USE_TWITTER = true
+  puts "using twitter"
+else
+  USE_TWITTER = false
+  puts "using local"
+end
 
 # Set up the controllers and helpers
 Dir[APP_ROOT.join('app', 'controllers', '*.rb')].each { |file| require file }
