@@ -5,9 +5,7 @@ end
 post "/searches" do
   @search = Search.create!(params[:search])
   on_searches = Search.where(:on => true).where("id <> ?", @search.id)
-  on_searches.each do |search|
-    search.update_attributes(:on => false)
-  end
+  on_searches.each { |search| search.stop! }
 
   SearchWorker.perform_async(@search.id)
 
@@ -55,4 +53,10 @@ get "/searches/:id/realtime" do
                           .limit(5)
 
   erb :search_show
+end
+
+post "/searches/:id/stop" do
+  @search = Search.find(params[:id])
+  @search.stop!
+  redirect to(search_path(@search))
 end

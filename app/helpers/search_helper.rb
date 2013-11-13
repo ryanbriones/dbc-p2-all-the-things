@@ -10,4 +10,8 @@ helpers do
   def search_path(search)
     "/searches/#{search.id}"
   end
+
+  def stop_search_path(search)
+    "/searches/#{search.id}/stop"
+  end
 end

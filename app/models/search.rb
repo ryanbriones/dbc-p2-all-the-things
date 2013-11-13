@@ -19,4 +19,8 @@ class Search < ActiveRecord::Base
       sleep rand(1..20).seconds
     end
   end
+
+  def stop!
+    update_attributes!(:on => false)
+  end
 end

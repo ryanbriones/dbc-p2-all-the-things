@@ -9,6 +9,14 @@
 </p>
 <% end %>
 
+<% if @search.on? %>
+<div>
+  <form action="<%= stop_search_path(@search) %>" method="post">
+    <input type="submit" value="Stop this search">
+  </form>
+</div>
+<% end %>
+
 <div id="tweets">
   <% @tweets.each do |tweet| %>
   <%= erb :_tweet, locals: {tweet: tweet} %>
