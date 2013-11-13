@@ -3,7 +3,7 @@
 <p>
   <a href="<%= realtime_search_path(@search) %>">Show search in realtime</a>
 </p>
-<% else %>
+<% elsif @search.on? && @realtime %>
 <p>
   <a href="<%= search_path(@search) %>">Show historical search results</a>
 </p>

@@ -4,6 +4,13 @@ end
 
 post "/searches" do
   @search = Search.create!(params[:search])
+  on_searches = Search.where(:on => true).where("id <> ?", @search.id)
+  on_searches.each do |search|
+    search.update_attributes(:on => false)
+  end
+
+  SearchWorker.perform_async(@search.id)
+
   redirect to(realtime_search_path(@search))
 end
 
