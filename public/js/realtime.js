@@ -7,21 +7,25 @@ $(function() {
     }
 
     $.get(url, data, function(response) {
-      lastUpdated = response.timestamp;
+      if(response.stop) {
+        window.location.href = "/searches/" + searchId;
+      } else {
+        lastUpdated = response.timestamp;
 
-      for(var i = 0; i < response.tweets.length; i++) {
-        var newTweet = response.tweets[i].tweet;
-        var newTweetHTML = $("#tweet_template .tweet").clone();
-        newTweetHTML.hide();
-        newTweetHTML.find(".screen_name").html(newTweet.screen_name);
-        newTweetHTML.find(".text").html(newTweet.text);
-        newTweetHTML.find(".tweeted_at").html(newTweet.tweeted_at);
+        for(var i = 0; i < response.tweets.length; i++) {
+          var newTweet = response.tweets[i].tweet;
+          var newTweetHTML = $("#tweet_template .tweet").clone();
+          newTweetHTML.hide();
+          newTweetHTML.find(".screen_name").html(newTweet.screen_name);
+          newTweetHTML.find(".text").html(newTweet.text);
+          newTweetHTML.find(".tweeted_at").html(newTweet.tweeted_at);
 
-        $('#tweets').prepend(newTweetHTML);
-        newTweetHTML.delay(500 * i).fadeIn(1000);
-      }
+          $('#tweets').prepend(newTweetHTML);
+          newTweetHTML.delay(500 * i).fadeIn(1000);
+        }
    
-      setTimeout(periodicTimer, 5000);
+        setTimeout(periodicTimer, 5000);
+      }
     });
   })();
 })

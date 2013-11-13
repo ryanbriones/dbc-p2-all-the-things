@@ -11,6 +11,9 @@ get "/searches/:id.json" do
   content_type :json
 
   @search = Search.find(params[:id])
+  unless @search.on?
+    return {:stop => true}.to_json
+  end
 
   base_query = @search.tweets.order("tweeted_at ASC").select("screen_name, text, tweeted_at")
   @tweets = if params[:since]

@@ -1,9 +1,11 @@
-<h1>Twitter Search</h1>
-
 <h2>Search: <%= @search.keywords %> (<%= on_text(@search) %>)</h2>
-<% if @search.on? %>
+<% if @search.on? && !@realtime %>
 <p>
   <a href="<%= realtime_search_path(@search) %>">Show search in realtime</a>
+</p>
+<% else %>
+<p>
+  <a href="<%= search_path(@search) %>">Show historical search results</a>
 </p>
 <% end %>
 
