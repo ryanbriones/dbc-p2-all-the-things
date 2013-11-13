@@ -161,13 +161,13 @@ namespace :app do
 
     loop do
       Tweet.create!({
-        screen_name: search.tweets.order("RANDOM()").first.screen_name,
+        screen_name: Tweet.order("RANDOM()").first.screen_name,
         text: Faker::Lorem.sentences(2).join(' '),
         tweeted_at: Time.now,
         search_id: search.id
       })
 
-      sleep rand(3..20).seconds
+      sleep rand(1..20).seconds
     end
   end
 end

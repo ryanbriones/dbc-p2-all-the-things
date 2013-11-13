@@ -4,7 +4,7 @@ end
 
 post "/searches" do
   @search = Search.create!(params[:search])
-  redirect to("/searches/#{@search.id}")
+  redirect to(realtime_search_path(@search))
 end
 
 get "/searches/:id.json" do
@@ -12,28 +12,33 @@ get "/searches/:id.json" do
 
   @search = Search.find(params[:id])
 
-  base_query = @search.tweets.order("tweeted_at DESC").select("screen_name, text, tweeted_at")
+  base_query = @search.tweets.order("tweeted_at ASC").select("screen_name, text, tweeted_at")
   @tweets = if params[:since]
-    base_query.where("tweeted_at > ?", Time.at(params[:since].to_f))
+    base_query.where("tweeted_at > ?", Time.at(params[:since].to_f + 1))
   else
     base_query
   end
 
   {
-    timestamp: @tweets.first ? @tweets.first.tweeted_at.to_f : params[:since].to_f,
+    timestamp: @tweets.last ? @tweets.last.tweeted_at.to_f : params[:since].to_f,
     tweets: @tweets
   }.to_json
 end
 
 get "/searches/:id" do
   @search = Search.find(params[:id])
-  @tweets = @search.tweets.order("tweeted_at ASC").select("screen_name, text, tweeted_at")
+  @tweets = @search.tweets.order("tweeted_at DESC").select("screen_name, text, tweeted_at")
 
   erb :search_show
 end
 
 get "/searches/:id/realtime" do
   @search = Search.find(params[:id])
+  unless @search.on?
+    redirect to(search_path(@search))
+    return
+  end
+
   @realtime = true
   @tweets = @search.tweets.order("tweeted_at DESC")
                           .select("screen_name, text, tweeted_at")

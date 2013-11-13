@@ -9,15 +9,14 @@
 
 <div id="tweets">
   <% @tweets.each do |tweet| %>
-  <div class="tweet">
-    <span class="screen_name"><%= tweet.screen_name %></span>
-    <span class="text"><%= tweet.text %></span>
-    <span class="tweeted_at"><%= tweet.tweeted_at %></span>
-  </div>
+  <%= erb :_tweet, locals: {tweet: tweet} %>
   <% end %>
 </div>
 
 <% if @realtime %>
+<div id="tweet_template">
+  <%= erb :_tweet, locals: {tweet: Tweet.new} %>
+</div>
 <script type="text/javascript">
 var searchId = <%= @search.id %>;
 var lastUpdated = <%= @tweets.first ? @tweets.first.tweeted_at.to_i : "(new Date).getTime() / 1000" %>;
