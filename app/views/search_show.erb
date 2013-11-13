@@ -1,3 +1,11 @@
 <h1>Twitter Search</h1>
 
 <h2>Search: <%= @search.keywords %></h2>
+
+<% @tweets.each do |tweet| %>
+<div class="tweet">
+  <span class="screen_name"><%= tweet.screen_name %></span>
+  <span class="text"><%= tweet.text %></span>
+  <span class="tweeted_at"><%= tweet.tweeted_at %></span>
+</div>
+<% end %>

@@ -9,6 +9,7 @@ end
 
 get "/searches/:id" do
   @search = Search.find(params[:id])
+  @tweets = @search.tweets.order("tweeted_at DESC").select("screen_name, text, tweeted_at")
 
   erb :search_show
 end
