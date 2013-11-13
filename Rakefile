@@ -149,6 +149,29 @@ namespace :db do
   task :reset => [:drop, :create, :migrate, :seed]
 end
 
+namespace :app do
+  task :stream_local do
+    unless ENV.has_key?('SEARCH')
+      abort "Must specific SEARCH parameter"
+    end
+
+    require "faker"
+
+    search = Search.find(ENV["SEARCH"])
+
+    loop do
+      Tweet.create!({
+        screen_name: search.tweets.order("RANDOM()").first.screen_name,
+        text: Faker::Lorem.sentences(2).join(' '),
+        tweeted_at: Time.now,
+        search_id: search.id
+      })
+
+      sleep rand(3..20).seconds
+    end
+  end
+end
+
 desc 'Start IRB with application environment loaded'
 task "console" do
   exec "irb -r./config/environment"

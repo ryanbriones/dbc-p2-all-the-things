@@ -1,11 +1,26 @@
 <h1>Twitter Search</h1>
 
-<h2>Search: <%= @search.keywords %></h2>
+<h2>Search: <%= @search.keywords %> (<%= on_text(@search) %>)</h2>
+<% if @search.on? %>
+<p>
+  <a href="<%= realtime_search_path(@search) %>">Show search in realtime</a>
+</p>
+<% end %>
 
-<% @tweets.each do |tweet| %>
-<div class="tweet">
-  <span class="screen_name"><%= tweet.screen_name %></span>
-  <span class="text"><%= tweet.text %></span>
-  <span class="tweeted_at"><%= tweet.tweeted_at %></span>
+<div id="tweets">
+  <% @tweets.each do |tweet| %>
+  <div class="tweet">
+    <span class="screen_name"><%= tweet.screen_name %></span>
+    <span class="text"><%= tweet.text %></span>
+    <span class="tweeted_at"><%= tweet.tweeted_at %></span>
+  </div>
+  <% end %>
 </div>
+
+<% if @realtime %>
+<script type="text/javascript">
+var searchId = <%= @search.id %>;
+var lastUpdated = <%= @tweets.first ? @tweets.first.tweeted_at.to_i : "(new Date).getTime() / 1000" %>;
+</script>
+<script src="/js/realtime.js" type="text/javascript"></script>
 <% end %>
