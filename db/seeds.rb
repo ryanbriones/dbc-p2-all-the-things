@@ -1,5 +1,7 @@
 require "faker"
 
+search = Search.create!(keywords: Faker::Lorem.word)
+
 random_screen_names = []
 20.times do
   random_screen_names << Faker::Internet.user_name
@@ -9,6 +11,7 @@ end
   Tweet.create!({
     screen_name: random_screen_names.sample,
     text: Faker::Lorem.sentences(2).join(' '),
-    tweeted_at: (rand(1..20)*rand(1..60)).seconds.ago
+    tweeted_at: (rand(1..20)*rand(1..60)).seconds.ago,
+    search_id: search.id
   })
 end
