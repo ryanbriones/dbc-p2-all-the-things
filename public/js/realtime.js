@@ -1,27 +1,27 @@
-$(function() {
+$(document).ready(function() {
   function Tweet(screenName, text, tweetedAt) {
     this.screenName = "@" + screenName;
-    this.text = text;
-    this.tweetedAt = tweetedAt;
+    this.text       = text;
+    this.tweetedAt  = tweetedAt;
   }
 
   Tweet.prototype.pack = function() {
     console.log("packing tweet...");
     this.locale = $( "#tweet_template .tweet" ).clone();
-    this.locale.find( ".screen_name" ).html( this.screenName );
-    this.locale.find( ".text" ).html( this.text );
-    this.locale.find( ".tweet_at" ).html( this.tweeted_at );
+    (this.locale).find( ".screen_name" ).html( this.screenName );
+    (this.locale).find( ".text" ).html( this.text );
+    (this.locale).find( ".tweet_at" ).html( this.tweeted_at );
   }
 
   Tweet.prototype.display = function(delayFactor) {
     console.log("displaying tweet");
     $( "#tweets" ).prepend( this.locale );
-    this.locale.delay(100 * delayFactor).fadeIn(2000);
+    (this.locale).delay(100 * delayFactor).fadeIn(2000);
   }
 
   function getTweets() {
     console.log("getTweets called");
-    var url = "/searches/" + searchId + ".json";
+    var url  = "/searches/" + searchId + ".json";
     var data = { since: lastUpdated }
 
     $.get(url, data, function(response) {
@@ -34,17 +34,12 @@ $(function() {
         lastUpdated = response.timestamp;
 
         for(var i = 0; i < response.tweets.length; i++) {
-
           var t = response.tweets[i].tweet
-
           var tweetObj = new Tweet(
-                            t.screen_name,
-                            t.text,
-                            t.tweeted_at
-                           );
-
-          console.log(tweetObj);
-
+                                   t.screen_name,
+                                   t.text,
+                                   t.tweeted_at
+                                  );
           tweetObj.pack(i);
           tweetObj.display();
         }
@@ -84,4 +79,3 @@ $(function() {
 //       }
 //     });
 //   })();
-
