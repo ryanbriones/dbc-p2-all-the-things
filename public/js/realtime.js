@@ -1,3 +1,5 @@
+// tweet collection
+
 function Collection(responseTweets) {
   this.tweets = responseTweets.tweets;
 }
@@ -14,6 +16,8 @@ Collection.prototype.makeTweets = function() {
     tweetObj.display(i);
   }
 }
+
+// tweet
 
 function Tweet(screenName, text, tweetedAt) {
   this.screenName = "@" + screenName;
@@ -33,6 +37,8 @@ Tweet.prototype.display = function(delayFactor) {
   (this.locale).delay(100 * delayFactor).fadeIn(2000);
 }
 
+// driver
+
 function getTweets() {
   var url  = "/searches/" + searchId + ".json";
   var data = { since: lastUpdated }
@@ -47,7 +53,7 @@ function getTweets() {
       lastUpdated = response.timestamp;
       collection = new Collection(response);
       collection.makeTweets();
-      setTimeout(getTweets, 7000); // changed back to setTimeout to test
+      setTimeout(getTweets, 7000);
     }
   });
 }
