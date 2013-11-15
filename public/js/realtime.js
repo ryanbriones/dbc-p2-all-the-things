@@ -1,53 +1,55 @@
-$(document).ready(function() {
-  function Tweet(screenName, text, tweetedAt) {
-    this.screenName = "@" + screenName;
-    this.text       = text;
-    this.tweetedAt  = tweetedAt;
-  }
+function Tweet(screenName, text, tweetedAt) {
+  this.screenName = "@" + screenName;
+  this.text       = text;
+  this.tweetedAt  = tweetedAt;
+}
 
-  Tweet.prototype.pack = function() {
-    console.log("packing tweet...");
-    this.locale = $( "#tweet_template .tweet" ).clone();
-    (this.locale).find( ".screen_name" ).html( this.screenName );
-    (this.locale).find( ".text" ).html( this.text );
-    (this.locale).find( ".tweet_at" ).html( this.tweeted_at );
-  }
+Tweet.prototype.pack = function() {
+  console.log("packing tweet...");
+  this.locale = $( "#tweet_template .tweet" ).clone();
+  (this.locale).find( ".screen_name" ).html( this.screenName );
+  (this.locale).find( ".text" ).html( this.text );
+  (this.locale).find( ".tweet_at" ).html( this.tweeted_at );
+}
 
-  Tweet.prototype.display = function(delayFactor) {
-    console.log("displaying tweet");
-    $( "#tweets" ).prepend( this.locale );
-    (this.locale).delay(100 * delayFactor).fadeIn(2000);
-  }
+Tweet.prototype.display = function(delayFactor) {
+  console.log("displaying tweet");
+  $( "#tweets" ).prepend( this.locale );
+  (this.locale).delay(100 * delayFactor).fadeIn(2000);
+}
 
-  function getTweets() {
-    console.log("getTweets called");
-    var url  = "/searches/" + searchId + ".json";
-    var data = { since: lastUpdated }
+function getTweets() {
+  console.log("getTweets called");
+  var url  = "/searches/" + searchId + ".json";
+  var data = { since: lastUpdated }
 
-    $.get(url, data, function(response) {
-      console.log("$.get called");
-      console.log(response);
+  $.get(url, data, function(response) {
+    console.log("$.get called");
+    console.log(response);
 
-      if(response.stop) {
-        window.location.href = "/searches/" + searchId;
-      } else {
-        lastUpdated = response.timestamp;
+    if(response.stop) {
+      window.location.href = "/searches/" + searchId;
+    } else {
+      lastUpdated = response.timestamp;
 
-        for(var i = 0; i < response.tweets.length; i++) {
-          var t = response.tweets[i].tweet
-          var tweetObj = new Tweet(
-                                   t.screen_name,
-                                   t.text,
-                                   t.tweeted_at
-                                  );
-          tweetObj.pack(i);
-          tweetObj.display();
-        }
+      for(var i = 0; i < response.tweets.length; i++) {
+        var t = response.tweets[i].tweet
+        var tweetObj = new Tweet(
+                                 t.screen_name,
+                                 t.text,
+                                 t.tweeted_at
+                                );
+        tweetObj.pack(i);
+        tweetObj.display();
       }
-    });
-  }
 
-  setInterval(getTweets, 15000);
+      setTimeout(getTweets, 7000); // changed back to setTimeout to test
+    }
+  });
+}
+
+$(document).ready(function() {
+  getTweets();
 });
 
 // // via http://stackoverflow.com/a/5052661
