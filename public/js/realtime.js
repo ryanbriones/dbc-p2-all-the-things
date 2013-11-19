@@ -27,7 +27,7 @@ function Tweet(screenName, text, tweetedAt) {
 
 Tweet.prototype.pack = function() {
   this.locale = $( "#tweet_template .tweet" ).clone();
-  (this.locale).find( ".screen_name" ).html( this.screenName );
+  (this.locale).find( ".screen_name" ).html( "@" + this.screenName );
   (this.locale).find( ".text" ).html( this.text );
   (this.locale).find( ".tweet_at" ).html( this.tweeted_at );
 }
