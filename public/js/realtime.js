@@ -20,7 +20,7 @@ Collection.prototype.makeTweets = function() {
 // tweet
 
 function Tweet(screenName, text, tweetedAt) {
-  this.screenName = "@" + screenName;
+  this.screenName = screenName;
   this.text       = text;
   this.tweetedAt  = tweetedAt;
 }
@@ -51,7 +51,7 @@ function getTweets() {
       window.location.href = "/searches/" + searchId;
     } else {
       lastUpdated = response.timestamp;
-      raw_tweets = []
+      var raw_tweets = []
 
       for (i = 0; i < response.tweets.length; i++) {
         raw_tweets.push(response.tweets[i].tweet);
