@@ -1,12 +1,12 @@
 // tweet collection
 
 function Collection(responseTweets) {
-  this.tweets = responseTweets.tweets;
+  this.tweets = responseTweets;
 }
 
 Collection.prototype.makeTweets = function() {
   for(var i = 0; i < (this.tweets).length; i++) {
-    var t = (this.tweets)[i].tweet
+    var t = (this.tweets)[i]
     var tweetObj = new Tweet(
                              t.screen_name,
                              t.text,
@@ -51,7 +51,13 @@ function getTweets() {
       window.location.href = "/searches/" + searchId;
     } else {
       lastUpdated = response.timestamp;
-      collection = new Collection(response);
+      raw_tweets = []
+
+      for (i = 0; i < response.tweets.length; i++) {
+        raw_tweets.push(response.tweets[i].tweet);
+      }
+
+      collection = new Collection(raw_tweets);
       collection.makeTweets();
       setTimeout(getTweets, 7000);
     }
